@@ -1,0 +1,6 @@
+#ifndef TF2RCON_CONFIG_H
+#define TF2RCON_CONFIG_H
+
+#define TF2RCON_VERSION "${tf2rcon_VERSION}"
+
+#endif // TF2RCON_CONFIG_H

@@ -26,3 +26,13 @@
 *.exe
 *.out
 *.app
+
+# Output
+build
+
+# KDevelop
+*.kdev4
+.kdev_include_paths
+
+# Dolphin
+.directory
