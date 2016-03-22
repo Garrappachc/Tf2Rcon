@@ -47,3 +47,21 @@ set (tf2rcon_QRCS resources.qrc)
 
 add_executable (tf2rcon MACOSX_BUNDLE WIN32 ${tf2rcon_SOURCES} ${tf2rcon_HEADERS} ${tf2rcon_QRCS})
 target_link_libraries (tf2rcon Qt5::Core Qt5::Widgets Qt5::Network ${QRCON_LIBRARIES})
+
+install (TARGETS tf2rcon RUNTIME DESTINATION .)
+
+if (WIN32)
+    set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION ".")
+    include(InstallRequiredSystemLibraries)
+
+    include (QtUtils)
+    query_qmake (QT_INSTALL_LIBS QT_INSTALL_BINS)
+
+    include (Utils)
+    get_platform_qpa_plugin (QT_QPA_PLUGIN)
+
+    get_filename_component (QRCON_INSTALL_LIBS ${QRCON_LIBRARIES} DIRECTORY)
+    
+    include (DeployQt5)
+    install_qt5_executable("tf2rcon.exe" "${QT_QPA_PLUGIN}" "" "${QT_INSTALL_LIBS};${QRCON_INSTALL_LIBS}/../bin")
+endif ()

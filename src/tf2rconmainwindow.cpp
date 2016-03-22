@@ -23,6 +23,7 @@
 #include "maplistcommand.h"
 #include "statuscommand.h"
 #include "userlistcommand.h"
+#include <qcvarcommand.h>
 #include <QtWidgets>
 #include <functional>
 
@@ -45,6 +46,11 @@ Tf2RconMainWindow::Tf2RconMainWindow(QWidget* parent) :
     connect(ui->connectString, &QLineEdit::selectionChanged, [this]() {
         if (ui->connectString->selectedText() != ui->connectString->text())
             ui->connectString->selectAll();
+    });
+
+    connect(ui->sourceTvConnectString, &QLineEdit::selectionChanged, [this]() {
+        if (ui->sourceTvConnectString->selectedText() != ui->connectString->text())
+            ui->sourceTvConnectString->selectAll();
     });
 }
 
@@ -93,8 +99,12 @@ void Tf2RconMainWindow::onStatusUpdated()
     ui->hostName->setText(m_status->hostName());
     ui->currentLevel->setText(m_status->currentLevel());
     
-    QRconCommand* cmd = new QRconCommand("sv_password", this);
+    QCvarCommand* cmd = new QCvarCommand("sv_password", this);
     connect(cmd, &QRconCommand::finished, this, &Tf2RconMainWindow::fillConnectString);
+    m_rcon->command(cmd);
+
+    cmd = new QCvarCommand("tv_password", this);
+    connect(cmd, &QRconCommand::finished, this, &Tf2RconMainWindow::fillSourceTvString);
     m_rcon->command(cmd);
 }
 
@@ -157,32 +167,40 @@ void Tf2RconMainWindow::kickSelected()
 
 void Tf2RconMainWindow::fillConnectString()
 {
-    QRconCommand* cmd = qobject_cast<QRconCommand*>(sender()); // sv_password
+    QCvarCommand* cmd = qobject_cast<QCvarCommand*>(sender()); // sv_password
     Q_ASSERT(cmd);
+    Q_ASSERT(cmd->command() == "sv_password");
     
-    QRegularExpression re("^\\\"sv_password\\\"\\s=\\s\\\"(.[^\\\"]+)\\\".*$");
+    QString connectString = QStringLiteral("connect %1:%2").arg(
+        m_rcon->hostName(), QString::number(m_status->port()));
     
-    auto lines = cmd->body().split('\n');
-    for (auto l: lines) {
-        auto match = re.match(l);
-        if (match.hasMatch()) {
-            QString password = match.captured(1);
-            QString connectString = QStringLiteral("connect %1:%2").arg(
-                m_rcon->hostName(), QString::number(m_rcon->port()));
-            
-            if (!password.isEmpty()) {
-                connectString += "; password " + password;
-            }
-            
-            ui->connectString->setText(connectString);
-            ui->connectString->setEnabled(true);
-            
-            break;
-        }
+    auto password = cmd->value();
+    if (!password.isEmpty()) {
+        connectString += "; password " + password;
     }
+            
+    ui->connectString->setText(connectString);
+    ui->connectString->setEnabled(true);
+
+    cmd->deleteLater();
 }
 
 void Tf2RconMainWindow::fillSourceTvString()
 {
+    QCvarCommand* cmd = qobject_cast<QCvarCommand*>(sender()); // tv_password
+    Q_ASSERT(cmd);
+    Q_ASSERT(cmd->command() == "tv_password");
 
+    QString connectString = QStringLiteral("connect %1:%2").arg(
+        m_rcon->hostName(), QString::number(m_status->sourceTvPort()));
+
+    auto password = cmd->value();
+    if (!password.isEmpty()) {
+        connectString += "; password " + password;
+    }
+
+    ui->sourceTvConnectString->setText(connectString);
+    ui->sourceTvConnectString->setEnabled(true);
+
+    cmd->deleteLater();
 }
