@@ -22,7 +22,7 @@
 
 #include <QMainWindow>
 #include <QScopedPointer>
-#include <qrcon/qrconsession.h>
+#include <qrconsession.h>
 
 namespace Ui { class Tf2RconWindow; }
 class StatusCommand;

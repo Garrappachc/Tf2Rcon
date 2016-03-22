@@ -20,7 +20,7 @@
 #ifndef STATUSCOMMAND_H
 #define STATUSCOMMAND_H
 
-#include <qrcon/qrconcommand.h>
+#include <qrconcommand.h>
 #include <QHostAddress>
 
 class StatusCommand : public QRconCommand {

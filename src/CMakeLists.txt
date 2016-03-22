@@ -23,6 +23,8 @@ find_path (QRCON_INCLUDE_DIR qrcon.h
     PATH_SUFFIXES qrcon
 )
 
+include_directories (${QRCON_INCLUDE_DIR})
+
 set (tf2rcon_SOURCES
     logindialog.cpp
     maplistcommand.cpp

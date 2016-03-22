@@ -20,7 +20,7 @@
 #ifndef MAPLISTCOMMAND_H
 #define MAPLISTCOMMAND_H
 
-#include <qrcon/qrconcommand.h>
+#include <qrconcommand.h>
 
 class MapListCommand : public QRconCommand {
     Q_OBJECT

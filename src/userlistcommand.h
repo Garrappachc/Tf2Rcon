@@ -20,7 +20,7 @@
 #ifndef USERLISTCOMMAND_H
 #define USERLISTCOMMAND_H
 
-#include <qrcon/qrconcommand.h>
+#include <qrconcommand.h>
 #include <QMap>
 
 class UserListCommand : public QRconCommand {
