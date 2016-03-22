@@ -48,9 +48,9 @@ set (tf2rcon_QRCS resources.qrc)
 add_executable (tf2rcon MACOSX_BUNDLE WIN32 ${tf2rcon_SOURCES} ${tf2rcon_HEADERS} ${tf2rcon_QRCS})
 target_link_libraries (tf2rcon Qt5::Core Qt5::Widgets Qt5::Network ${QRCON_LIBRARIES})
 
-install (TARGETS tf2rcon RUNTIME DESTINATION .)
-
 if (WIN32)
+    install (TARGETS tf2rcon RUNTIME DESTINATION .)
+
     set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION ".")
     include(InstallRequiredSystemLibraries)
 
