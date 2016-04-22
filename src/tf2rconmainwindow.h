@@ -47,6 +47,7 @@ private slots:
     void kickSelected();
     void fillConnectString();
     void fillSourceTvString();
+    void execCommand();
     
 private:
     QScopedPointer<Ui::Tf2RconWindow> ui;

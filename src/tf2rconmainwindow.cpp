@@ -40,6 +40,7 @@ Tf2RconMainWindow::Tf2RconMainWindow(QWidget* parent) :
     connect(ui->kickSelected, &QPushButton::clicked, this, &Tf2RconMainWindow::kickSelected);
     connect(ui->maps, &QAbstractItemView::clicked, std::bind(&QPushButton::setEnabled, ui->changelevel, true));
     connect(ui->users, &QAbstractItemView::clicked, std::bind(&QPushButton::setEnabled, ui->kickSelected, true));
+    connect(ui->command, &QPushButton::clicked, this, &Tf2RconMainWindow::execCommand);
     
     connect(m_rcon, &QRconSession::authenticated, this, &Tf2RconMainWindow::onAuthenticated);
     
@@ -106,6 +107,8 @@ void Tf2RconMainWindow::onStatusUpdated()
     cmd = new QCvarCommand("tv_password", this);
     connect(cmd, &QRconCommand::finished, this, &Tf2RconMainWindow::fillSourceTvString);
     m_rcon->command(cmd);
+    
+    ui->command->setEnabled(true);
 }
 
 void Tf2RconMainWindow::onUsersUpdated()
@@ -203,4 +206,16 @@ void Tf2RconMainWindow::fillSourceTvString()
     ui->sourceTvConnectString->setEnabled(true);
 
     cmd->deleteLater();
+}
+
+void Tf2RconMainWindow::execCommand()
+{
+    bool ok;
+    QString cmd = QInputDialog::getText(this, tr("Execute command"),
+                                        tr("What command shall we execute?"), QLineEdit::Normal,
+                                        QString(), &ok);
+    
+    if (ok && !cmd.isEmpty()) {
+        m_rcon->command(cmd);
+    }
 }
