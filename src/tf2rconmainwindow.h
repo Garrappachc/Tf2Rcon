@@ -25,6 +25,7 @@
 #include <qrconsession.h>
 
 namespace Ui { class Tf2RconWindow; }
+class SourceModPluginListCommand;
 class StatusCommand;
 class MapListCommand;
 class UserListCommand;
@@ -48,9 +49,11 @@ private slots:
     void fillConnectString();
     void fillSourceTvString();
     void execCommand();
+    void updateStatus();
     
 private:
     QScopedPointer<Ui::Tf2RconWindow> ui;
+    SourceModPluginListCommand* m_smPlugins;
     QRconSession* m_rcon;
     StatusCommand* m_status;
     MapListCommand* m_maps;

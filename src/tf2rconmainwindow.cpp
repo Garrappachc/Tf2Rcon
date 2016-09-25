@@ -21,6 +21,7 @@
 #include "ui_tf2rconmainwindow.h"
 #include "logindialog.h"
 #include "maplistcommand.h"
+#include "sourcemodpluginlistcommand.h"
 #include "statuscommand.h"
 #include "userlistcommand.h"
 #include <qcvarcommand.h>
@@ -85,6 +86,9 @@ void Tf2RconMainWindow::onAuthenticated()
     m_maps = new MapListCommand(this);
     connect(m_maps, &MapListCommand::finished, this, &Tf2RconMainWindow::onMapsUpdated);
     m_rcon->command(m_maps);
+
+    m_smPlugins = new SourceModPluginListCommand(this);
+    m_rcon->command(m_smPlugins);
     
     QTimer* timer = new QTimer(this);
     connect(timer, &QTimer::timeout,
@@ -139,14 +143,18 @@ void Tf2RconMainWindow::changeLavel()
 {
     QModelIndex index = ui->maps->currentIndex();
     QString map = index.data().toString();
-    
-    QRconCommand* cmd = new QRconCommand("changelevel " + map, this);
-    connect(cmd, &QRconCommand::finished, [cmd, this]() {
-        this->m_rcon->command(this->m_status);
-        cmd->deleteLater();
-    });
-    
-    m_rcon->command(cmd);
+
+    if (m_smPlugins->plugins().contains(QStringLiteral("Nextmap"))) {
+        // use SourceMod if available
+        QRconCommand* cmd = new QRconCommand(QStringLiteral("sm_map %1").arg(map), this);
+        connect(cmd, &QRconCommand::finished, this, &Tf2RconMainWindow::updateStatus);
+        m_rcon->command(cmd);
+    } else {
+        QRconCommand* cmd = new QRconCommand(QStringLiteral("changelevel %1").arg(map), this);
+        connect(cmd, &QRconCommand::finished, this, &Tf2RconMainWindow::updateStatus);
+        m_rcon->command(cmd);
+    }
+
     ui->changelevel->setEnabled(false);
     ui->maps->clearSelection();
 }
@@ -218,4 +226,9 @@ void Tf2RconMainWindow::execCommand()
     if (ok && !cmd.isEmpty()) {
         m_rcon->command(cmd);
     }
+}
+
+void Tf2RconMainWindow::updateStatus()
+{
+    m_rcon->command(m_status);
 }
