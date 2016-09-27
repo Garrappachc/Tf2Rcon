@@ -20,6 +20,7 @@
 #ifndef LOGINDIALOG_H
 #define LOGINDIALOG_H
 
+#include <QComboBox>
 #include <QDialog>
 #include <QLineEdit>
 #include <QSpinBox>
@@ -35,12 +36,18 @@ public:
     QString hostName();
     QString password();
     quint32 port();
+
+private slots:
+    void activateServerConfig(int index);
     
 private:
+    void loadServers();
+
     QLineEdit* m_hostName;
     QLineEdit* m_password;
-    QSpinBox* m_port;
-    
+    QSpinBox* m_port; 
+    QComboBox* m_servers;
+
 };
 
 #endif // LOGINDIALOG_H

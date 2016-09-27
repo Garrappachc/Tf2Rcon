@@ -28,6 +28,7 @@ include_directories (${QRCON_INCLUDE_DIR})
 set (tf2rcon_SOURCES
     logindialog.cpp
     maplistcommand.cpp
+    savedserverswindow.cpp
     sourcemodpluginlistcommand.cpp
     statuscommand.cpp
     tf2rconmainwindow.cpp
@@ -39,6 +40,7 @@ set (tf2rcon_SOURCES
 set (tf2rcon_HEADERS
     logindialog.h
     maplistcommand.h
+    savedserverswindow.h
     sourcemodpluginlistcommand.h
     statuscommand.h
     tf2rconmainwindow.h
@@ -46,7 +48,10 @@ set (tf2rcon_HEADERS
 )
 
 set (tf2rcon_QRCS resources.qrc)
-set (tf2rcon_UIS tf2rconmainwindow.ui)
+set (tf2rcon_UIS
+    savedserverswindow.ui
+    tf2rconmainwindow.ui
+)
 
 add_executable (tf2rcon MACOSX_BUNDLE WIN32 ${tf2rcon_SOURCES} ${tf2rcon_HEADERS} ${tf2rcon_QRCS} ${tf2rcon_UIS})
 target_link_libraries (tf2rcon Qt5::Core Qt5::Widgets Qt5::Network ${QRCON_LIBRARIES})

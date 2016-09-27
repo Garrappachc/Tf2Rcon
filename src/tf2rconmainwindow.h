@@ -29,6 +29,7 @@ class SourceModPluginListCommand;
 class StatusCommand;
 class MapListCommand;
 class UserListCommand;
+class SavedServersWindow;
 
 class Tf2RconMainWindow : public QMainWindow {
     Q_OBJECT
@@ -50,6 +51,7 @@ private slots:
     void fillSourceTvString();
     void execCommand();
     void updateStatus();
+    void openSavedServersWindow();
     
 private:
     QScopedPointer<Ui::Tf2RconWindow> ui;
@@ -58,6 +60,7 @@ private:
     StatusCommand* m_status;
     MapListCommand* m_maps;
     UserListCommand* m_users;
+    QScopedPointer<SavedServersWindow> m_savedServersWindow;
 
 };
 

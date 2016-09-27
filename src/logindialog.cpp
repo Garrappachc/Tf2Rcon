@@ -18,6 +18,7 @@
  */
 
 #include "logindialog.h"
+#include <qrconserverconfig.h>
 #include <QtWidgets>
 
 LoginDialog::LoginDialog(QWidget* parent) : QDialog(parent)
@@ -41,8 +42,15 @@ LoginDialog::LoginDialog(QWidget* parent) : QDialog(parent)
     QPushButton* login = new QPushButton(tr("Login"));
     connect(login, &QPushButton::clicked, this, &QDialog::accept);
     layout->addWidget(login);
-    
+
+    m_servers = new QComboBox;
+    m_servers->addItem(QString()); // empty config by default
+    connect(m_servers, SIGNAL(activated(int)), this, SLOT(activateServerConfig(int)));
+    layout->addWidget(m_servers);
+
     setLayout(layout);
+
+    loadServers();
 }
 
 LoginDialog::~LoginDialog() {}
@@ -60,4 +68,28 @@ QString LoginDialog::password()
 quint32 LoginDialog::port()
 {
     return static_cast<quint32>(m_port->value());
+}
+
+void LoginDialog::activateServerConfig(int index)
+{
+    QVariant data = m_servers->itemData(index);
+    if (data.isValid()) {
+        QRconServerConfig config = data.value<QRconServerConfig>();
+        m_hostName->setText(config.hostName());
+        m_password->setText(config.password());
+        m_port->setValue(config.port());
+    }
+}
+
+void LoginDialog::loadServers()
+{
+    QSettings s;
+    if (s.contains("savedservers")) {
+        QVariantMap map = s.value("savedservers").toMap();
+        for (auto it = map.begin(); it != map.end(); ++it) {
+            QString name = it.key();
+            QRconServerConfig config = it.value().value<QRconServerConfig>();
+            m_servers->addItem(name, QVariant::fromValue(config));
+        }
+    }
 }

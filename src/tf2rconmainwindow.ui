@@ -188,6 +188,7 @@
      <string>Tf&amp;2Rcon</string>
     </property>
     <addaction name="connectToServer"/>
+    <addaction name="actionSavedServers"/>
    </widget>
    <addaction name="menuTf2Rcon"/>
   </widget>
@@ -198,6 +199,11 @@
    </property>
    <property name="shortcut">
     <string>Alt+C</string>
+   </property>
+  </action>
+  <action name="actionSavedServers">
+   <property name="text">
+    <string>Saved servers...</string>
    </property>
   </action>
  </widget>

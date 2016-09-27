@@ -21,6 +21,7 @@
 #include "ui_tf2rconmainwindow.h"
 #include "logindialog.h"
 #include "maplistcommand.h"
+#include "savedserverswindow.h"
 #include "sourcemodpluginlistcommand.h"
 #include "statuscommand.h"
 #include "userlistcommand.h"
@@ -37,6 +38,7 @@ Tf2RconMainWindow::Tf2RconMainWindow(QWidget* parent) :
     statusBar()->showMessage(tr("Not connected"));
     
     connect(ui->connectToServer, &QAction::triggered, this, &Tf2RconMainWindow::showLoginDialog);
+    connect(ui->actionSavedServers, &QAction::triggered, this, &Tf2RconMainWindow::openSavedServersWindow);
     connect(ui->changelevel, &QPushButton::clicked, this, &Tf2RconMainWindow::changeLavel);
     connect(ui->kickSelected, &QPushButton::clicked, this, &Tf2RconMainWindow::kickSelected);
     connect(ui->maps, &QAbstractItemView::clicked, std::bind(&QPushButton::setEnabled, ui->changelevel, true));
@@ -51,7 +53,7 @@ Tf2RconMainWindow::Tf2RconMainWindow(QWidget* parent) :
     });
 
     connect(ui->sourceTvConnectString, &QLineEdit::selectionChanged, [this]() {
-        if (ui->sourceTvConnectString->selectedText() != ui->connectString->text())
+        if (ui->sourceTvConnectString->selectedText() != ui->sourceTvConnectString->text())
             ui->sourceTvConnectString->selectAll();
     });
 }
@@ -231,4 +233,13 @@ void Tf2RconMainWindow::execCommand()
 void Tf2RconMainWindow::updateStatus()
 {
     m_rcon->command(m_status);
+}
+
+void Tf2RconMainWindow::openSavedServersWindow()
+{
+    if (!m_savedServersWindow) {
+        m_savedServersWindow.reset(new SavedServersWindow);
+    }
+
+    m_savedServersWindow->show();
 }
