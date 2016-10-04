@@ -19,6 +19,7 @@
 
 #include "tf2rconmainwindow.h"
 #include "ui_tf2rconmainwindow.h"
+#include "commandlinewidget.h"
 #include "logindialog.h"
 #include "maplistcommand.h"
 #include "savedserverswindow.h"
@@ -220,14 +221,10 @@ void Tf2RconMainWindow::fillSourceTvString()
 
 void Tf2RconMainWindow::execCommand()
 {
-    bool ok;
-    QString cmd = QInputDialog::getText(this, tr("Execute command"),
-                                        tr("What command shall we execute?"), QLineEdit::Normal,
-                                        QString(), &ok);
-    
-    if (ok && !cmd.isEmpty()) {
-        m_rcon->command(cmd);
-    }
+    if (m_commandLineWindow.isNull())
+        m_commandLineWindow.reset(new CommandLineWidget(m_rcon));
+
+    m_commandLineWindow->show();
 }
 
 void Tf2RconMainWindow::updateStatus()

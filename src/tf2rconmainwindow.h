@@ -25,6 +25,7 @@
 #include <qrconsession.h>
 
 namespace Ui { class Tf2RconWindow; }
+class CommandLineWidget;
 class SourceModPluginListCommand;
 class StatusCommand;
 class MapListCommand;
@@ -60,6 +61,7 @@ private:
     StatusCommand* m_status;
     MapListCommand* m_maps;
     UserListCommand* m_users;
+    QScopedPointer<CommandLineWidget> m_commandLineWindow;
     QScopedPointer<SavedServersWindow> m_savedServersWindow;
 
 };

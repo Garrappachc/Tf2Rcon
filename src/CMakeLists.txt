@@ -26,6 +26,7 @@ find_path (QRCON_INCLUDE_DIR qrcon.h
 include_directories (${QRCON_INCLUDE_DIR})
 
 set (tf2rcon_SOURCES
+    commandlinewidget.cpp
     logindialog.cpp
     maplistcommand.cpp
     savedserverswindow.cpp
@@ -38,6 +39,7 @@ set (tf2rcon_SOURCES
 )
 
 set (tf2rcon_HEADERS
+    commandlinewidget.h
     logindialog.h
     maplistcommand.h
     savedserverswindow.h
@@ -49,6 +51,7 @@ set (tf2rcon_HEADERS
 
 set (tf2rcon_QRCS resources.qrc)
 set (tf2rcon_UIS
+    commandlinewidget.ui
     savedserverswindow.ui
     tf2rconmainwindow.ui
 )
