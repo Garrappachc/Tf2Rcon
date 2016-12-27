@@ -45,7 +45,7 @@ LoginDialog::LoginDialog(QWidget* parent) : QDialog(parent)
 
     m_servers = new QComboBox;
     m_servers->addItem(QString()); // empty config by default
-    connect(m_servers, SIGNAL(activated(int)), this, SLOT(activateServerConfig(int)));
+    connect(m_servers, qOverload<int>(&QComboBox::activated), this, &LoginDialog::activateServerConfig);
     layout->addWidget(m_servers);
 
     setLayout(layout);

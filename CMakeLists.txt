@@ -1,4 +1,4 @@
-﻿project (Tf2Rcon)
+project (Tf2Rcon)
 cmake_minimum_required (VERSION 3.0 FATAL_ERROR)
 
 # Automatically link Qt executables to qtmain target on Windows
@@ -47,6 +47,8 @@ elseif (MSVC)
     set (CMAKE_CXX_FLAGS_DEBUG "/W4")
     set (CMAKE_CXX_FLAGS_RELEASE "/DQT_NO_DEBUG /DQT_NO_DEBUG_OUTPUT")
 endif ()
+
+set (CMAKE_CXX_STANDARD "14")
 
 # find version
 if (NOT tf2rcon_VERSION)

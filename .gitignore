@@ -36,3 +36,6 @@ build
 
 # Dolphin
 .directory
+
+# QtCreator
+CMakeLists.txt.user

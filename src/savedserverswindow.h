@@ -13,6 +13,12 @@ public:
     explicit SavedServersWindow(QWidget *parent = nullptr);
     ~SavedServersWindow();
 
+protected:
+    void closeEvent(QCloseEvent* event);
+
+private slots:
+    void addServer();
+
 private:
     QScopedPointer<Ui::SavedServersWindow> ui;
 };

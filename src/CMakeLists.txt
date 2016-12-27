@@ -6,7 +6,7 @@ set (CMAKE_AUTOMOC ON)
 set (CMAKE_AUTOUIC ON)
 set (CMAKE_AUTORCC ON)
 
-find_package (Qt5Core REQUIRED)
+find_package (Qt5Core 5.7 REQUIRED)
 include_directories (${Qt5Core_INCLUDE_DIRS})
 
 find_package (Qt5Widgets REQUIRED)
@@ -30,6 +30,8 @@ set (tf2rcon_SOURCES
     logindialog.cpp
     maplistcommand.cpp
     savedserverswindow.cpp
+    serverlistdelegate.cpp
+    serverlistmodel.cpp
     sourcemodpluginlistcommand.cpp
     statuscommand.cpp
     tf2rconmainwindow.cpp
@@ -43,6 +45,8 @@ set (tf2rcon_HEADERS
     logindialog.h
     maplistcommand.h
     savedserverswindow.h
+    serverlistdelegate.h
+    serverlistmodel.h
     sourcemodpluginlistcommand.h
     statuscommand.h
     tf2rconmainwindow.h
