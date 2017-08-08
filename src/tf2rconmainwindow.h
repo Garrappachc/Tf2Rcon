@@ -40,12 +40,16 @@ public:
     
     virtual ~Tf2RconMainWindow();
 
+public slots:
+    void refresh();
+
 protected:
     void showEvent(QShowEvent *event) override;
     
 private slots:
     void showLoginDialog();
     void onAuthenticated();
+    void onSessionError();
     void onStatusUpdated();
     void onUsersUpdated();
     void onMapsUpdated();
@@ -54,7 +58,6 @@ private slots:
     void fillConnectString();
     void fillSourceTvString();
     void execCommand();
-    void updateStatus();
     void openSavedServersWindow();
     
 private:

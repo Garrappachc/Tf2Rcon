@@ -39,6 +39,11 @@
    </item>
    <item row="1" column="0" colspan="2">
     <widget class="QPlainTextEdit" name="console">
+     <property name="font">
+      <font>
+       <family>Monospace</family>
+      </font>
+     </property>
      <property name="undoRedoEnabled">
       <bool>false</bool>
      </property>

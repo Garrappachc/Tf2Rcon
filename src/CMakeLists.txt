@@ -32,6 +32,7 @@ set (tf2rcon_SOURCES
     savedserverswindow.cpp
     serverlistdelegate.cpp
     serverlistmodel.cpp
+    serverstatuswidget.cpp
     sourcemodpluginlistcommand.cpp
     statuscommand.cpp
     tf2rconmainwindow.cpp
@@ -47,6 +48,7 @@ set (tf2rcon_HEADERS
     savedserverswindow.h
     serverlistdelegate.h
     serverlistmodel.h
+    serverstatuswidget.h
     sourcemodpluginlistcommand.h
     statuscommand.h
     tf2rconmainwindow.h
@@ -57,6 +59,7 @@ set (tf2rcon_QRCS resources.qrc)
 set (tf2rcon_UIS
     commandlinewidget.ui
     savedserverswindow.ui
+    serverstatuswidget.ui
     tf2rconmainwindow.ui
 )
 

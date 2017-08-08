@@ -23,6 +23,7 @@
 #include "logindialog.h"
 #include "maplistcommand.h"
 #include "savedserverswindow.h"
+#include "serverstatuswidget.h"
 #include "sourcemodpluginlistcommand.h"
 #include "statuscommand.h"
 #include "userlistcommand.h"
@@ -37,7 +38,12 @@ Tf2RconMainWindow::Tf2RconMainWindow(QWidget* parent) :
 {
     ui->setupUi(this);
     statusBar()->showMessage(tr("Not connected"));
-    
+
+    QSortFilterProxyModel *proxyModel = new QSortFilterProxyModel(this);
+    ui->maps->setModel(proxyModel);
+    proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+
+    connect(ui->mapFilter, &QLineEdit::textChanged, proxyModel, qOverload<const QString&>(&QSortFilterProxyModel::setFilterRegExp));
     connect(ui->connectToServer, &QAction::triggered, this, &Tf2RconMainWindow::showLoginDialog);
     connect(ui->actionSavedServers, &QAction::triggered, this, &Tf2RconMainWindow::openSavedServersWindow);
     connect(ui->changelevel, &QPushButton::clicked, this, &Tf2RconMainWindow::changeLavel);
@@ -47,6 +53,7 @@ Tf2RconMainWindow::Tf2RconMainWindow(QWidget* parent) :
     connect(ui->command, &QPushButton::clicked, this, &Tf2RconMainWindow::execCommand);
     
     connect(m_rcon, &QRconSession::authenticated, this, &Tf2RconMainWindow::onAuthenticated);
+    connect(m_rcon, &QRconSession::error, this, &Tf2RconMainWindow::onSessionError);
     
     connect(ui->connectString, &QLineEdit::selectionChanged, [this]() {
         if (ui->connectString->selectedText() != ui->connectString->text())
@@ -62,6 +69,12 @@ Tf2RconMainWindow::Tf2RconMainWindow(QWidget* parent) :
 }
 
 Tf2RconMainWindow::~Tf2RconMainWindow() {}
+
+void Tf2RconMainWindow::refresh()
+{
+    m_rcon->command(m_status);
+    m_rcon->command(m_users);
+}
 
 void Tf2RconMainWindow::showEvent(QShowEvent *event)
 {
@@ -86,6 +99,7 @@ void Tf2RconMainWindow::onAuthenticated()
 {
     setEnabled(true);
     statusBar()->showMessage(tr("Connected to %1").arg(m_rcon->hostName()));
+    ui->serverStatus->setConnected(true);
     
     m_status = new StatusCommand(this);
     connect(m_status, &StatusCommand::finished, this, &Tf2RconMainWindow::onStatusUpdated);
@@ -111,10 +125,16 @@ void Tf2RconMainWindow::onAuthenticated()
     timer->start(1000 * 60); // 1 minute
 }
 
+void Tf2RconMainWindow::onSessionError()
+{
+    ui->serverStatus->setConnected(false);
+    setEnabled(false);
+}
+
 void Tf2RconMainWindow::onStatusUpdated()
 {
-    ui->hostName->setText(m_status->hostName());
-    ui->currentLevel->setText(m_status->currentLevel());
+    ui->serverStatus->setServerName(m_status->hostName());
+    ui->serverStatus->setMap(m_status->currentLevel());
     
     QCvarCommand* cmd = new QCvarCommand("sv_password", this);
     connect(cmd, &QRconCommand::finished, this, &Tf2RconMainWindow::fillConnectString);
@@ -141,14 +161,17 @@ void Tf2RconMainWindow::onUsersUpdated()
 
 void Tf2RconMainWindow::onMapsUpdated()
 {
-    if (ui->maps->model())
-        ui->maps->model()->deleteLater();
-    
     ui->changelevel->setEnabled(false);
     ui->maps->clearSelection();
-    
-    QAbstractItemModel* model = new QStringListModel(m_maps->maps(), this);
-    ui->maps->setModel(model);
+
+    QSortFilterProxyModel* proxyModel = qobject_cast<QSortFilterProxyModel*>(ui->maps->model());
+    QStringListModel* model = qobject_cast<QStringListModel*>(proxyModel->sourceModel());
+    if (model == nullptr) {
+        model = new QStringListModel(this);
+        proxyModel->setSourceModel(model);
+    }
+
+    model->setStringList(m_maps->maps());
 }
 
 void Tf2RconMainWindow::changeLavel()
@@ -159,11 +182,11 @@ void Tf2RconMainWindow::changeLavel()
     if (m_smPlugins->plugins().contains(QStringLiteral("Nextmap"))) {
         // use SourceMod if available
         QRconCommand* cmd = new QRconCommand(QStringLiteral("sm_map %1").arg(map), this);
-        connect(cmd, &QRconCommand::finished, this, &Tf2RconMainWindow::updateStatus);
+        connect(cmd, &QRconCommand::finished, this, std::bind(&QRconSession::command, m_rcon, m_status));
         m_rcon->command(cmd);
     } else {
         QRconCommand* cmd = new QRconCommand(QStringLiteral("changelevel %1").arg(map), this);
-        connect(cmd, &QRconCommand::finished, this, &Tf2RconMainWindow::updateStatus);
+        connect(cmd, &QRconCommand::finished, this, std::bind(&QRconSession::command, m_rcon, m_status));
         m_rcon->command(cmd);
     }
 
@@ -178,10 +201,8 @@ void Tf2RconMainWindow::kickSelected()
     int id = m_users->id(userName);
     
     QRconCommand* cmd = new QRconCommand(QStringLiteral("kickid %1").arg(QString::number(id)), this);
-    connect(cmd, &QRconCommand::finished, [cmd, this]() {
-        this->m_rcon->command(this->m_status);
-        cmd->deleteLater();
-    });
+    connect(cmd, &QRconCommand::finished, std::bind(&QRconSession::command, m_rcon, m_users));
+    connect(cmd, &QRconCommand::finished, &QObject::deleteLater);
     
     m_rcon->command(cmd);
     ui->kickSelected->setEnabled(false);
@@ -234,11 +255,6 @@ void Tf2RconMainWindow::execCommand()
         m_commandLineWindow.reset(new CommandLineWidget(m_rcon));
 
     m_commandLineWindow->show();
-}
-
-void Tf2RconMainWindow::updateStatus()
-{
-    m_rcon->command(m_status);
 }
 
 void Tf2RconMainWindow::openSavedServersWindow()

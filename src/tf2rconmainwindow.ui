@@ -19,105 +19,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,1,0,0,0,0,0,0">
-    <item row="7" column="0" colspan="4">
-     <widget class="QLabel" name="label_2">
-      <property name="text">
-       <string>Connect string:</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="4" colspan="2">
-     <widget class="QLabel" name="hostName">
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0" colspan="4">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Server:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="4" colspan="2">
-     <widget class="QLabel" name="currentLevel">
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0" colspan="4">
-     <widget class="QLabel" name="label_3">
-      <property name="text">
-       <string>Map:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="5">
-     <widget class="QPushButton" name="changelevel">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="text">
-       <string>Change level</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="5" rowspan="4">
-     <widget class="QListView" name="maps">
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
-      </property>
-      <property name="showDropIndicator" stdset="0">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="4" rowspan="4">
-     <widget class="QListView" name="users">
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
-      </property>
-      <property name="showDropIndicator" stdset="0">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="4">
-     <widget class="QPushButton" name="kickSelected">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="text">
-       <string>Kick</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0" colspan="4">
-     <widget class="QPushButton" name="command">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="text">
-       <string>Command...</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0" colspan="4">
-     <widget class="QPushButton" name="exec">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="text">
-       <string>Execute config...</string>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="0" colspan="4">
+    <item row="5" column="0" colspan="2">
      <widget class="QPushButton" name="kickAll">
       <property name="enabled">
        <bool>false</bool>
@@ -127,27 +29,54 @@
       </property>
      </widget>
     </item>
-    <item row="7" column="4" colspan="2">
-     <widget class="QLineEdit" name="connectString">
+    <item row="6" column="3">
+     <widget class="QPushButton" name="changelevel">
       <property name="enabled">
        <bool>false</bool>
       </property>
-      <property name="readOnly">
-       <bool>true</bool>
+      <property name="text">
+       <string>Change level</string>
       </property>
      </widget>
     </item>
-    <item row="8" column="0" colspan="4">
-     <widget class="QLabel" name="label_4">
+    <item row="2" column="3" rowspan="4">
+     <widget class="QListView" name="maps">
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="showDropIndicator" stdset="0">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="3">
+     <widget class="QLineEdit" name="mapFilter">
+      <property name="placeholderText">
+       <string>Filter maps</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="2">
+     <widget class="QPushButton" name="kickSelected">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="text">
-       <string>SourceTV string:</string>
+       <string>Kick</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0" colspan="2">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Connect string:</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </item>
-    <item row="8" column="4" colspan="2">
+    <item row="8" column="2" colspan="2">
      <widget class="QLineEdit" name="sourceTvConnectString">
       <property name="enabled">
        <bool>false</bool>
@@ -157,14 +86,63 @@
       </property>
      </widget>
     </item>
+    <item row="4" column="0" colspan="2">
+     <widget class="QPushButton" name="exec">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="text">
+       <string>Execute config...</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="2" colspan="2">
+     <widget class="QLineEdit" name="connectString">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0" colspan="2">
+     <widget class="QPushButton" name="command">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="text">
+       <string>Command...</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0" colspan="2">
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>SourceTV string:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="2" rowspan="5">
+     <widget class="QListView" name="users">
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="showDropIndicator" stdset="0">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0" colspan="4">
+     <widget class="ServerStatusWidget" name="serverStatus" native="true"/>
+    </item>
    </layout>
    <zorder>maps</zorder>
-   <zorder>label</zorder>
-   <zorder>hostName</zorder>
    <zorder>changelevel</zorder>
-   <zorder>label_3</zorder>
    <zorder>users</zorder>
-   <zorder>currentLevel</zorder>
    <zorder>kickSelected</zorder>
    <zorder>command</zorder>
    <zorder>exec</zorder>
@@ -173,6 +151,8 @@
    <zorder>label_2</zorder>
    <zorder>label_4</zorder>
    <zorder>sourceTvConnectString</zorder>
+   <zorder>mapFilter</zorder>
+   <zorder>serverStatus</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -207,6 +187,14 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ServerStatusWidget</class>
+   <extends>QWidget</extends>
+   <header>serverstatuswidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="resources.qrc"/>
  </resources>
