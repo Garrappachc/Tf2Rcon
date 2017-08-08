@@ -11,6 +11,12 @@ CommandLineWidget::CommandLineWidget(QRconSession* rcon, QWidget *parent) :
     ui->setupUi(this);
 
     connect(ui->execute, &QPushButton::clicked, this, &CommandLineWidget::executeCommand);
+    connect(ui->command, &QLineEdit::editingFinished, ui->execute, &QPushButton::click);
+
+    /* Most common rcon commands */
+    QStringList commands { "mp_tournament_restart", "changelevel", "mp_timelimit", "spec_freeze_time", "status" };
+    QCompleter* completer = new QCompleter(commands, this);
+    ui->command->setCompleter(completer);
 }
 
 CommandLineWidget::~CommandLineWidget() {}
