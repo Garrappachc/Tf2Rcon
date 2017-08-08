@@ -57,9 +57,17 @@ Tf2RconMainWindow::Tf2RconMainWindow(QWidget* parent) :
         if (ui->sourceTvConnectString->selectedText() != ui->sourceTvConnectString->text())
             ui->sourceTvConnectString->selectAll();
     });
+
+    setEnabled(false);
 }
 
 Tf2RconMainWindow::~Tf2RconMainWindow() {}
+
+void Tf2RconMainWindow::showEvent(QShowEvent *event)
+{
+    QTimer::singleShot(50, this, &Tf2RconMainWindow::showLoginDialog);
+    Q_UNUSED(event);
+}
 
 void Tf2RconMainWindow::showLoginDialog()
 {
@@ -76,6 +84,7 @@ void Tf2RconMainWindow::showLoginDialog()
 
 void Tf2RconMainWindow::onAuthenticated()
 {
+    setEnabled(true);
     statusBar()->showMessage(tr("Connected to %1").arg(m_rcon->hostName()));
     
     m_status = new StatusCommand(this);
@@ -95,9 +104,9 @@ void Tf2RconMainWindow::onAuthenticated()
     
     QTimer* timer = new QTimer(this);
     connect(timer, &QTimer::timeout,
-            std::bind(static_cast<void (QRconSession::*)(QRconCommand*)>(&QRconSession::command), m_rcon, m_status)); // refresh status
+            std::bind(&QRconSession::command, m_rcon, m_status)); // refresh status
     connect(timer, &QTimer::timeout,
-            std::bind(static_cast<void (QRconSession::*)(QRconCommand*)>(&QRconSession::command), m_rcon, m_users)); // refresh users
+            std::bind(&QRconSession::command, m_rcon, m_users)); // refresh users
     
     timer->start(1000 * 60); // 1 minute
 }

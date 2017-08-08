@@ -18,6 +18,7 @@
  */
 
 #include "userlistcommand.h"
+#include <QtCore>
 
 UserListCommand::UserListCommand(QObject* parent): QRconCommand("users", parent)
 {
@@ -33,20 +34,17 @@ void UserListCommand::parseResponse()
 {
     m_users.clear();
     auto lines = body().split('\n', QString::SkipEmptyParts);
+
+    QRegularExpression regex("(\\d+):(\\d+):\"([^\"]*)\"");
+
     for (const QString& l: lines) {
-        if (l.startsWith("<") || l.endsWith("users"))
-            continue;
-        
-        auto seg = l.split(":");
-        int id = seg[1].toInt();
-        QString name = seg[2];
-        if (name.startsWith('"'))
-            name.remove(0, 1);
-        if (name.endsWith('"'))
-            name.remove(name.length() - 1, 1);
-        
-        m_users << name;
-        m_ids.insert(name, id);
+        auto match = regex.match(l);
+        if (match.hasMatch()) {
+            QString userName = match.captured(3);
+            QString id = match.captured(2);
+
+            m_users << userName;
+            m_ids.insert(userName, id.toInt());
+        }
     }
 }
-

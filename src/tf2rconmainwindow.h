@@ -39,6 +39,9 @@ public:
     explicit Tf2RconMainWindow(QWidget* parent = nullptr);
     
     virtual ~Tf2RconMainWindow();
+
+protected:
+    void showEvent(QShowEvent *event) override;
     
 private slots:
     void showLoginDialog();

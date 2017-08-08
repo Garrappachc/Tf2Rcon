@@ -26,7 +26,6 @@
 class UserListCommand : public QRconCommand {
     Q_OBJECT
 
-
 public:
     explicit UserListCommand(QObject* parent = nullptr);
     
